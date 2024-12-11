@@ -36,11 +36,11 @@ export const Ruler = ({updateZoomFactor}: Props) => {
         </label>
       </div>
 
-      <div className="ticks">
-        <p className="tick" style={{width: (1*zoom) + 'cm'}}>
+      <div className="units">
+        <p className="unit cm" style={{width: (1*zoom) + 'cm'}}>
           <span>1 cm</span>
         </p>
-        <p className="tick" style={{width: (1*zoom) + 'in'}}>
+        <p className="unit in" style={{width: (1*zoom) + 'in'}}>
           <span>1 in</span>
         </p>
       </div>

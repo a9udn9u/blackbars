@@ -21,29 +21,54 @@
     }
   }
 
-  .ticks {
-    .tick {
-      position: relative;
-      height: 8px;
-      border: solid 1px white;
-      border-width: 0 1px;
+  .units {
+    position: relative;
+
+    .unit {
+      position: absolute;
+      margin-top: -100%;
       display: flex;
       align-items: center;
       justify-content: center;
 
+      /* This renders the length line */
       &:before {
         content: '';
-        border-top: solid 1px white;
+        height: 1px;
+        flex: 1;
+        background-color: white;
+      }
+
+      /* This renders the ticks */
+      &:after {
+        content: '';
+        border: solid 1px white;
+        border-width: 0 1px;
+        position: absolute;
         width: 100%;
-        top: 50%;
+        height: 4px;
+      }
+
+      &.cm:after {
+        bottom: 0px;
+      }
+
+      &.in:after {
+        top: 0px;
       }
 
       > span {
         position: absolute;
-        background-color: inherit;
         font-size: .7em;
-        left: calc(100% + 1em);
         white-space: nowrap;
+      }
+
+      &.cm > span {
+        bottom: 150%;
+      }
+
+      &.in > span {
+        top: 150%;
       }
     }
   }
