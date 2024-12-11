@@ -1,0 +1,50 @@
+.ruler {
+  margin: 2em 0;
+  display: flex;
+  align-items: center;
+
+  .slider-wrapper {
+    margin-right: 2em;
+
+    .zoom-factor {
+      background-color: white;
+      color: black;
+      padding: 2px 6px;
+      border-radius: 7px;
+    }
+
+    .slider {
+      appearance: none;
+      height: 1px;
+      background-color: white;
+      margin: 0;
+    }
+  }
+
+  .ticks {
+    .tick {
+      position: relative;
+      height: 8px;
+      border: solid 1px white;
+      border-width: 0 1px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &:before {
+        content: '';
+        border-top: solid 1px white;
+        width: 100%;
+        top: 50%;
+      }
+
+      > span {
+        position: absolute;
+        background-color: inherit;
+        font-size: .7em;
+        left: calc(100% + 1em);
+        white-space: nowrap;
+      }
+    }
+  }
+}
