@@ -12,6 +12,11 @@ const SELECTED_AR_KEY = 'selected-aspect-ratios';
  */
 const SELECTED_DISPLAYS_KEY = 'selected-displays';
 
+/**
+ * Local storage key for the zoom factor
+ */
+const SELECTED_ZOOM_FACTOR_KEY = 'selected-zoom-factor';
+
 const retrieve = localStorage.getItem.bind(localStorage);
 const store = localStorage.setItem.bind(localStorage);
 const fromJson = JSON.parse.bind(JSON);
@@ -25,6 +30,9 @@ const toJson = JSON.stringify.bind(JSON);
   if (!retrieve(SELECTED_DISPLAYS_KEY)) {
     store(SELECTED_DISPLAYS_KEY, toJson(INITIAL_DISPLAYS));
   }
+  if (!retrieve(SELECTED_ZOOM_FACTOR_KEY)) {
+    store(SELECTED_ZOOM_FACTOR_KEY, '1');
+  }
 })();
 
 const storedAspectRatios: AspectRatio[] =
@@ -32,6 +40,9 @@ const storedAspectRatios: AspectRatio[] =
 
 const storedDisplays: Display[] =
     fromJson(retrieve(SELECTED_DISPLAYS_KEY) || '[]');
+
+const storedZoomFactor: number =
+    parseFloat(retrieve(SELECTED_ZOOM_FACTOR_KEY) || '1');
 
 // Add an element to an array, return the array with duplicated entries removed
 const addAndDedupe = (list: any[], item: any): any[] => {
@@ -47,10 +58,14 @@ const storeDisplays = (displays: Display[]) => {
   store(SELECTED_DISPLAYS_KEY, toJson(displays));
 }
 
+const storeZoomFactor = (factor: number) => {
+  store(SELECTED_ZOOM_FACTOR_KEY, '' + factor);
+}
+
 const appState = () => {
   const [aspectRatios, setAspectRatios] = useState(storedAspectRatios);
   const [displays, setDisplays] = useState(storedDisplays);
-  const [zoomFactor, setZoomFactor] = useState(.84);
+  const [zoomFactor, setZoomFactorState] = useState(storedZoomFactor);
 
   const addAspectRatio = (ar: AspectRatio) => {
     const neo = addAndDedupe(aspectRatios, ar);
@@ -80,6 +95,11 @@ const appState = () => {
     const neo = [...ser].map(s => fromJson(s));
     storeDisplays(neo);
     setDisplays(neo);
+  }
+
+  const setZoomFactor = (factor: number) => {
+    storeZoomFactor(factor);
+    setZoomFactorState(factor);
   }
 
   return {
