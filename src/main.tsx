@@ -1,5 +1,20 @@
-import { render } from 'preact'
-import './index.css'
-import { App } from './app.tsx'
+import { render } from 'preact';
+import { MantineProvider } from '@mantine/core';
+import { buildTheme, cssVarResolver } from './theme.ts';
+import { App } from './app.tsx';
 
-render(<App />, document.getElementById('app')!)
+import '@mantine/core/styles.css';
+import './index.css';
+import { AppStateProvider } from './lib/appstate.tsx';
+
+render(
+  <MantineProvider
+      defaultColorScheme='dark'
+      theme={buildTheme()}
+      cssVariablesResolver={cssVarResolver}>
+    <AppStateProvider>
+      <App />
+    </AppStateProvider>
+  </MantineProvider>,
+  document.getElementById('app')!
+);

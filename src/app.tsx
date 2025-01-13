@@ -1,64 +1,48 @@
-import { useState } from 'preact/hooks'
-import preactLogo from './assets/preact.svg'
-import viteLogo from '/vite.svg'
 import './app.css'
-import { Ruler } from './ruler/ruler'
-
-type AspectRatio = {
-  width: number, height: number
-}
+import { Ruler } from './components/ruler'
+import { DisplaySelector } from './components/display-selector'
+import { Group, Tabs, Text, Title } from '@mantine/core'
+import { AspectRatioSelector } from './components/ar-selector'
+import { DisplaySizeComparison } from './renders/display-size-comparison'
+import { ContentSizeVisualizer } from './renders/content-size-visualizer'
 
 export const App = () => {
-  const [aspectRatios, setAspectRatios] = useState<AspectRatio[]>([]);
-  const [width, setWidth] = useState('');
-  const [height, setHeight] = useState('');
-
-  // Add a new aspect ratio to the list
-  const addAspectRatio = () => {
-    if (width && height) {
-      const newAspectRatio = { width: parseInt(width), height: parseInt(height) };
-      setAspectRatios([...aspectRatios, newAspectRatio]);
-      setWidth('');
-      setHeight('');
-    }
-  };
-
   return (
-    <div className="App">
-      <h1>Black Bar Visualizer</h1>
+    <>
+      <Title order={1} my={'lg'} className="site-name">Black Bars</Title>
 
-      <Ruler/>
+      <Text my={'md'}>
+        This simple tool helps retro handheld enthusiasts visualize how content
+        will appear on screens with different aspect ratios.
+      </Text>
 
-      <div className="input-container">
-        <input
-          type="number"
-          value={width}
-          onChange={e => setWidth(e.currentTarget.value)}
-          placeholder="Width"
-        />
-        <input
-          type="number"
-          value={height}
-          onChange={e => setHeight(e.currentTarget.value)}
-          placeholder="Height"
-        />
-        <button onClick={addAspectRatio}>Add Aspect Ratio</button>
-      </div>
+      <Group mb='xl' gap='xl' align='flex-end'>
+        <AspectRatioSelector/>
+      </Group>
 
-      <div className="ratios-container">
-        {aspectRatios.length > 0 ? (
-          aspectRatios.map((ratio, index) => (
-            <div key={index} className="aspect-ratio-box" style={{
-              aspectRatio: `${ratio.width} / ${ratio.height}`
-            }}>
-              <span>{ratio.width} : {ratio.height}</span>
-            </div>
-          ))
-        ) : (
-          <p>No aspect ratios added yet.</p>
-        )}
-      </div>
-    </div>
+      <Group mb='xl' gap='xl' align='flex-end'>
+        <DisplaySelector/>
+      </Group>
+
+      <Group mb='xl' gap='xl'>
+        <Ruler/>
+      </Group>
+
+      <Tabs defaultValue="csv">
+        <Tabs.List>
+          <Tabs.Tab value="csv">Content Size Visualization</Tabs.Tab>
+          <Tabs.Tab value="dsc">Display Size Comparison</Tabs.Tab>
+        </Tabs.List>
+
+        <Tabs.Panel my='lg' value="csv">
+          <ContentSizeVisualizer/>
+        </Tabs.Panel>
+
+        <Tabs.Panel my='lg' value="dsc">
+          <DisplaySizeComparison/>
+        </Tabs.Panel>
+      </Tabs>
+    </>
   );
 };
 

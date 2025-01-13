@@ -1,4 +1,11 @@
 #app {
   margin: 0 auto;
   padding: 2rem;
+
+  .site-name {
+    background: url(/blackbars.svg) left center / 1.2em no-repeat;
+    padding-left: 1.5em;
+  }
 }
+
+

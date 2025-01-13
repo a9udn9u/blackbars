@@ -1,0 +1,51 @@
+.units {
+  position: relative;
+
+  .unit {
+    position: absolute;
+    margin-top: -100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* This renders the length line */
+    &:before {
+      content: '';
+      height: 1px;
+      flex: 1;
+      background-color: var(--mantine-color-bright);
+    }
+
+    /* This renders the ticks */
+    &:after {
+      content: '';
+      border: solid 1px var(--mantine-color-bright);
+      border-width: 0 1px;
+      position: absolute;
+      width: 100%;
+      height: 4px;
+    }
+
+    &.cm:after {
+      bottom: 0px;
+    }
+
+    &.in:after {
+      top: 0px;
+    }
+
+    > span {
+      position: absolute;
+      font-size: .7em;
+      white-space: nowrap;
+    }
+
+    &.cm > span {
+      bottom: 150%;
+    }
+
+    &.in > span {
+      top: 150%;
+    }
+  }
+}
