@@ -1,4 +1,4 @@
-import { Table, Title } from "@mantine/core";
+import { Table } from "@mantine/core";
 import { useAppState } from "../lib/appstate";
 import { Utils } from "../lib/utils";
 

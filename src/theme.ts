@@ -24,7 +24,7 @@ export const buildTheme = () => {
   });
 }
 
-export const cssVarResolver: CSSVariablesResolver = theme => ({
+export const cssVarResolver: CSSVariablesResolver = _theme => ({
   variables: {
   },
   light: {

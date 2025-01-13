@@ -86,7 +86,7 @@ const renderDisplaySection = (
         {
           arDims
             .filter((_, i) => arIndex === i)
-            .map((dim, i) => {
+            .map(dim => {
               const color = Utils.getColor(arIndex);
               return (
                 <div style={{
