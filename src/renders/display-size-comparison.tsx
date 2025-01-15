@@ -4,8 +4,16 @@ import { Utils } from "../lib/utils";
 
 import './stacked-grid.scss';
 
-const sortDisplaysByWidth = (displays: Display[]) => {
+const sortDisplaysByWidth = (displays: Display[])
+    : [Display[], number, number] => {
   let maxWidth = 0, maxHeight = 0;
+
+  if (!displays || displays.length === 0) return [[], 0, 0];
+  if (displays.length === 1) {
+    const {width, height} = Utils.computeDimension(displays[0]);
+    return [displays, width, height];
+  }
+
   const sorted = [...displays].sort((a, b) => {
     const {width: w1, height: h1} = Utils.computeDimension(a);
     const {width: w2, height: h2} = Utils.computeDimension(b);
@@ -13,7 +21,7 @@ const sortDisplaysByWidth = (displays: Display[]) => {
     maxHeight = Math.max(maxHeight, h1, h2);
     return w1 - w2;
   });
-  return [sorted, maxWidth, maxHeight] as [Display[], number, number];
+  return [sorted, maxWidth, maxHeight];
 }
 
 const getTableData = (displays: Display[]) => {
@@ -38,12 +46,16 @@ export const DisplaySizeComparison = () => {
 
   const shouldRender = displays.length > 0;
 
-  const tableData = !shouldRender ? {} : {
+  if (!shouldRender) {
+    return null;
+  }
+
+  const tableData = {
     head: ['Display', 'Width', 'Height', 'Viewing Area', 'Area Difference'],
     body: getTableData(displays)
   };
 
-  return !shouldRender ? null : (
+  return (
     <>
       <Title order={3} mb='lg'>Display Size Comparison</Title>
 

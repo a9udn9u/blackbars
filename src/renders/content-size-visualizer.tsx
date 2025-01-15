@@ -15,6 +15,13 @@ type RenderData = [
 
 const sortDisplayByArea = (displays: Display[]): [Display, Dimension][] => {
   const dims = new Map<Display, Dimension>();
+
+  if (!displays || displays.length === 0) return [];
+  if (displays.length == 1) {
+    const [d] = displays;
+    return [[d, Utils.computeDimension(d)]];
+  }
+
   const sorted = [...displays].sort((a, b) => {
     if (!dims.has(a)) dims.set(a, Utils.computeDimension(a));
     if (!dims.has(b)) dims.set(b, Utils.computeDimension(b));
