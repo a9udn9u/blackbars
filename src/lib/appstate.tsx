@@ -1,5 +1,6 @@
 import { createContext } from "preact";
-import { DEVICES, INITIAL_ASPECT_RATIOS, INITIAL_DISPLAYS, PLATFORMS } from "./initial-states";
+import { INITIAL_ASPECT_RATIOS, INITIAL_DISPLAYS } from "./initial-states";
+import { DEVICES, PLATFORMS } from "./devices";
 import { useContext, useState } from "preact/hooks";
 
 /**

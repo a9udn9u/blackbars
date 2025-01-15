@@ -1,5 +1,5 @@
 import { useState } from 'preact/hooks'
-import { Autocomplete, Chip, Code, Group, Text } from '@mantine/core';
+import { Anchor, Autocomplete, Chip, Code, Group, Text } from '@mantine/core';
 import { InfoBubble } from './info-bubble';
 import { useAppState } from '../lib/appstate';
 import { Utils } from '../lib/utils';
@@ -75,6 +75,9 @@ export const DisplaySelector = ({}: Props) => {
             onKeyUp={handleKeyUp}
             onOptionSubmit={addDisplay}
         />
+        <Anchor fz='.8em' href="https://github.com/a9udn9u/blackbars/edit/main/src/lib/devices.ts">
+          add missing devices
+        </Anchor>
       </label>
 
       <Group>

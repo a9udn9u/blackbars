@@ -16,11 +16,11 @@ export const App = () => {
         will appear on screens with different aspect ratios.
       </Text>
 
-      <Group mb='xl' gap='xl' align='flex-end'>
+      <Group mb='xl' gap='xl'>
         <AspectRatioSelector/>
       </Group>
 
-      <Group mb='xl' gap='xl' align='flex-end'>
+      <Group mb='xl' gap='xl'>
         <DisplaySelector/>
       </Group>
 
