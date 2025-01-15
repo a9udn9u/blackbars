@@ -53,31 +53,29 @@ export const DisplaySelector = ({}: Props) => {
 
   return (
     <>
-      <div>
-        <label>
-          Add Display
-          <InfoBubble>
-            <Text>
-              Try search by handheld names, if the handheld is not in our
-              database, you can add custom display specs by typing
-              <Code>&lt;size&gt; &lt;width&gt; &lt;height&gt;</Code>
-              then hit <Code>&lt;enter&gt;</Code>.
-              For example <Code>3.5 4 3</Code> represents a 3.5 inch 4:3
-              display.
-            </Text>
-          </InfoBubble>
+      <label>
+        Add Display
+        <InfoBubble>
+          <Text>
+            Try search by handheld names, if the handheld is not in our
+            database, you can add custom display specs by typing
+            <Code>&lt;size&gt; &lt;width&gt; &lt;height&gt;</Code>
+            then hit <Code>&lt;enter&gt;</Code>.
+            For example <Code>3.5 4 3</Code> represents a 3.5 inch 4:3
+            display.
+          </Text>
+        </InfoBubble>
 
-          <Autocomplete
-              mt='xs'
-              spellcheck={false}
-              value={displayInput}
-              data={[...state.devices.keys()]}
-              onBlur={handleBlur}
-              onKeyUp={handleKeyUp}
-              onOptionSubmit={addDisplay}
-          />
-        </label>
-      </div>
+        <Autocomplete
+            mt='xs'
+            spellcheck={false}
+            value={displayInput}
+            data={[...state.devices.keys()]}
+            onBlur={handleBlur}
+            onKeyUp={handleKeyUp}
+            onOptionSubmit={addDisplay}
+        />
+      </label>
 
       <Group>
         {

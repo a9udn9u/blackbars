@@ -1,7 +1,7 @@
 import './app.css'
 import { Ruler } from './components/ruler'
 import { DisplaySelector } from './components/display-selector'
-import { Group, Tabs, Text, Title } from '@mantine/core'
+import { Group, Stack, Text, Title } from '@mantine/core'
 import { AspectRatioSelector } from './components/ar-selector'
 import { DisplaySizeComparison } from './renders/display-size-comparison'
 import { ContentSizeVisualizer } from './renders/content-size-visualizer'
@@ -28,20 +28,13 @@ export const App = () => {
         <Ruler/>
       </Group>
 
-      <Tabs defaultValue="csv">
-        <Tabs.List>
-          <Tabs.Tab value="csv">Content Size Visualization</Tabs.Tab>
-          <Tabs.Tab value="dsc">Display Size Comparison</Tabs.Tab>
-        </Tabs.List>
+      <Stack mb='xl' gap={0}>
+        <DisplaySizeComparison/>
+      </Stack>
 
-        <Tabs.Panel my='lg' value="csv">
-          <ContentSizeVisualizer/>
-        </Tabs.Panel>
-
-        <Tabs.Panel my='lg' value="dsc">
-          <DisplaySizeComparison/>
-        </Tabs.Panel>
-      </Tabs>
+      <Stack mb='xl' gap={0}>
+        <ContentSizeVisualizer/>
+      </Stack>
     </>
   );
 };

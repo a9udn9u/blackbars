@@ -122,7 +122,7 @@ export const DEVICES: [string, Display][] = [
   ["Retroid Pocket 5", {size: 5.5, ar: {x: 16, y: 9}}],
   ["Trimui Brick", {size: 3.2, ar: {x: 4, y: 3}}],
   ["Trimui Smart", {size: 2.4, ar: {x: 4, y: 3}}],
-  ["Trimui Smart Pro", {size: 5, ar: {x: 16, y: 9}}],
+  ["Trimui Smart Pro", {size: 4.95, ar: {x: 16, y: 9}}],
 ];
 
 export const INITIAL_ASPECT_RATIOS: AspectRatio[] = [

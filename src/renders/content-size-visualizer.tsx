@@ -1,9 +1,184 @@
-import { Code, CSSProperties, parseThemeColor, Stack, Table, Title } from "@mantine/core";
+import { Code, CSSProperties, Group, parseThemeColor, Stack, Table, Title } from "@mantine/core";
 import { useAppState } from "../lib/appstate";
 import { Utils } from "../lib/utils";
 import { useEffect, useState } from "preact/hooks";
 
 import './stacked-grid.scss';
+
+type RenderData = [
+  Display,        // Display
+  Dimension,      // Display dimensions
+  AspectRatio[],  // All selected aspect ratios
+  Dimension[],    // Content dimensions on this display
+  number[],       // Smallest content area for each aspect ratio by display
+];
+
+const sortDisplayByArea = (displays: Display[]): [Display, Dimension][] => {
+  const dims = new Map<Display, Dimension>();
+  const sorted = [...displays].sort((a, b) => {
+    if (!dims.has(a)) dims.set(a, Utils.computeDimension(a));
+    if (!dims.has(b)) dims.set(b, Utils.computeDimension(b));
+    return dims.get(a)!.area - dims.get(b)!.area;
+  });
+  return sorted.map(d => [d, dims.get(d)!]);
+}
+
+const buildRenderData = (displays: Display[], aspectRatios: AspectRatio[]):
+    RenderData[] => {
+  const displaysAndDims = sortDisplayByArea(displays);
+  const arDimsByDisplay = displaysAndDims.map(([_, dims]) => {
+    return aspectRatios.map(ar => Utils.computeContentDimension(dims, ar));
+  });
+  const arDimsBaselines: number[] = [];
+  for (let i = 0; i < aspectRatios.length; i++) {
+    const areas = [];
+    for (let j = 0; j < arDimsByDisplay.length; j++) {
+      areas.push(arDimsByDisplay[j][i].area);
+    }
+    arDimsBaselines.push(Math.min(...areas));
+  }
+
+  return displaysAndDims.map(([display, displayDims], idx) => ([
+    display,
+    displayDims,
+    aspectRatios,
+    arDimsByDisplay[idx],
+    arDimsBaselines,
+  ]));
+}
+
+/**
+ * Visualize content viewing size on each display
+ */
+export const ContentSizeVisualizer = () => {
+  const {
+    selectedDisplays: displays,
+    selectedAspectRatios: aspectRatios,
+    zoomFactor
+  } = useAppState();
+
+  const [highlightIndex, setHighlightIndex] = useState<number>(0);
+
+  useEffect(() => {
+    if (highlightIndex >= aspectRatios.length) {
+      setHighlightIndex(0);
+    }
+  }, [aspectRatios]);
+
+  const highlightAspectRatio = (ev: MouseEvent) => {
+    let row: HTMLElement | null = ev.target as HTMLElement;
+    while (row && row.tagName !== 'TR') row = row.parentElement;
+    if (row) {
+      const idx = Math.max(0, [...row.parentElement!.children].indexOf(row));
+      if (idx !== highlightIndex) {
+        setHighlightIndex(idx);
+      }
+    }
+  }
+
+  const shouldRender = displays.length > 0 && aspectRatios.length > 0;
+
+  if (!shouldRender) {
+    return null;
+  }
+
+  const renderData = buildRenderData(displays, aspectRatios);
+
+  return (
+    <>
+    <Title order={3} mb='lg'>Content Size Visualization</Title>
+
+      <Group mb='lg'>
+        {
+          renderData.map(data =>
+              renderDisplaySection(data, highlightIndex, zoomFactor))
+        }
+      </Group>
+      <Stack onMouseEnterCapture={highlightAspectRatio} gap={0}>
+        {
+          renderData.map(data => renderStatsTables(data, highlightIndex))
+        }
+      </Stack>
+    </>
+  );
+}
+
+const renderDisplaySection = (
+  [
+    display,
+    displayDim,
+    aspectRatios,
+    arDims,
+    arBaselines,
+  ]: RenderData,
+  arIndex: number,
+  zoomFactor: number,
+) => {
+
+  return (
+    <Stack gap={0} align='center'>
+      <Title order={4}>
+        <Code fz='h4' bg='none'>{Utils.getDisplayLabel(display)}</Code>
+      </Title>
+      <div className="stacked-grid" style={{
+        width: `${displayDim.width * zoomFactor}in`,
+        height: `${displayDim.height * zoomFactor}in`,
+        outline: 'solid 1px',
+      }}>
+        {
+          arDims
+            .filter((_, i) => arIndex === i)
+            .map(dim => {
+              const color = Utils.getColor(arIndex);
+              return (
+                <div style={{
+                  width: `${dim.width * zoomFactor}in`,
+                  height: `${dim.height * zoomFactor}in`,
+                  backgroundColor: `${color}`
+                }}>
+                  <i>{Utils.getAspectRatioLabel(aspectRatios[arIndex])}</i>
+                  {
+                    <>
+                      <div className="diagonal-line" />
+                      <i className="diagonal-text" style={{
+                        backgroundColor: `${color}`
+                      }}>
+                        {dim.diagonal.toFixed(1)} in
+                        <br/>
+                        {(dim.area / arBaselines[arIndex] * 100).toFixed(0)}%
+                      </i>
+                    </>
+                  }
+                </div>
+              );
+            })
+        }
+      </div>
+    </Stack>
+  );
+}
+
+const renderStatsTables = (
+  [
+    display,
+    displayDim,
+    aspectRatios,
+    arDims,
+  ]: RenderData,
+  arIndex: number,
+) => {
+  return (
+    <>
+      <Title order={4}>
+        The
+        <Code fz='h4' bg='none'>{Utils.getDisplayLabel(display)}</Code>
+        Display
+      </Title>
+
+      {renderTable(displayDim, aspectRatios, arDims, arIndex)}
+    </>
+  );
+}
 
 const renderTable = (
   displayDim: Dimension,
@@ -31,7 +206,6 @@ const renderTable = (
                   color: theme.primaryColor,
                   theme,
                 });
-                console.log(color);
                 style.tr = {
                   backgroundColor: color.value + '33'
                 };
@@ -55,102 +229,5 @@ const renderTable = (
         }
       </Table.Tbody>
     </Table>
-  );
-}
-
-const renderDisplaySection = (
-  display: Display,
-  aspectRatios: AspectRatio[],
-  arIndex: number,
-  zoomFactor: number,
-) => {
-  const displayDim = Utils.computeDimension(display);
-  const arDims =
-    aspectRatios.map(ar => Utils.computeContentDimension(displayDim, ar));
-
-  return (
-    <Stack mb='xl' gap={0}>
-      <Title order={4} mb='md'>
-        On the
-        <Code fz='h4' bg='none'>{Utils.getDisplayLabel(display)}</Code>
-        Display
-      </Title>
-
-      {renderTable(displayDim, aspectRatios, arDims, arIndex)}
-
-      <div className="stacked-grid" style={{
-        width: `${displayDim.width * zoomFactor}in`,
-        height: `${displayDim.height * zoomFactor}in`,
-        outline: 'solid 1px',
-      }}>
-        {
-          arDims
-            .filter((_, i) => arIndex === i)
-            .map(dim => {
-              const color = Utils.getColor(arIndex);
-              return (
-                <div style={{
-                  width: `${dim.width * zoomFactor}in`,
-                  height: `${dim.height * zoomFactor}in`,
-                  backgroundColor: `${color}`
-                }}>
-                  <i>{Utils.getAspectRatioLabel(aspectRatios[arIndex])}</i>
-                  {
-                    <>
-                      <div className="diagonal-line" />
-                      <i className="diagonal-text" style={{
-                        backgroundColor: `${color}`
-                      }}>
-                        {dim.diagonal.toFixed(1)} in
-                      </i>
-                    </>
-                  }
-                </div>
-              );
-            })
-        }
-      </div>
-    </Stack>
-  );
-}
-
-/**
- * Visualize content viewing size on each display
- */
-export const ContentSizeVisualizer = () => {
-  const {
-    selectedDisplays: displays,
-    selectedAspectRatios: aspectRatios,
-    zoomFactor
-  } = useAppState();
-
-  const [highlightIndex, setHighlightIndex] = useState<number>(0);
-
-  useEffect(() => {
-    if (highlightIndex >= aspectRatios.length) {
-      setHighlightIndex(0);
-    }
-  }, [aspectRatios]);
-
-  const shouldRender = displays.length > 0 && aspectRatios.length > 0;
-
-  const highlightAspectRatio = (ev: MouseEvent) => {
-    let row: HTMLElement | null = ev.target as HTMLElement;
-    while (row && row.tagName !== 'TR') row = row.parentElement;
-    if (row) {
-      const idx = Math.max(0, [...row.parentElement!.children].indexOf(row));
-      if (idx !== highlightIndex) {
-        setHighlightIndex(idx);
-      }
-    }
-  }
-
-  return !shouldRender ? null : (
-    <div onMouseEnterCapture={highlightAspectRatio}>
-      {
-        displays.map(d => renderDisplaySection(
-          d, aspectRatios, highlightIndex, zoomFactor))
-      }
-    </div>
   );
 }

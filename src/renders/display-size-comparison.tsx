@@ -1,4 +1,4 @@
-import { Table } from "@mantine/core";
+import { Table, Title } from "@mantine/core";
 import { useAppState } from "../lib/appstate";
 import { Utils } from "../lib/utils";
 
@@ -45,7 +45,7 @@ export const DisplaySizeComparison = () => {
 
   return !shouldRender ? null : (
     <>
-      <Table mb='lg' data={tableData}/>
+      <Title order={3} mb='lg'>Display Size Comparison</Title>
 
       <div className="stacked-grid end" style={{
         width: `${maxWidth * zoomFactor}in`,
@@ -69,6 +69,8 @@ export const DisplaySizeComparison = () => {
         })
       }
       </div>
+
+      <Table mt='lg' data={tableData}/>
     </>
   );
 }

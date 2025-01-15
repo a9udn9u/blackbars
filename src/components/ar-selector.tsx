@@ -49,29 +49,27 @@ export const AspectRatioSelector = ({}: Props) => {
 
   return (
     <>
-      <div>
-        <label>
-          Content Aspect Ratio
-          <InfoBubble>
-            <Text>
-              Select platforms, or add custom aspect ratio by typing
-              <Code>&lt;width&gt; &lt;height&gt;</Code> then hit
-              <Code>&lt;enter&gt;</Code>.
-              For example <Code>4 3</Code> represents 4:3 content.
-            </Text>
-          </InfoBubble>
+      <label>
+        Content Aspect Ratio
+        <InfoBubble>
+          <Text>
+            Select platforms, or add custom aspect ratio by typing
+            <Code>&lt;width&gt; &lt;height&gt;</Code> then hit
+            <Code>&lt;enter&gt;</Code>.
+            For example <Code>4 3</Code> represents 4:3 content.
+          </Text>
+        </InfoBubble>
 
-          <Autocomplete
-              mt='xs'
-              spellcheck={false}
-              value={arInput}
-              data={[...state.platforms.keys()]}
-              onBlur={handleBlur}
-              onKeyUp={handleKeyUp}
-              onOptionSubmit={addAspectRatio}
-          />
-        </label>
-      </div>
+        <Autocomplete
+            mt='xs'
+            spellcheck={false}
+            value={arInput}
+            data={[...state.platforms.keys()]}
+            onBlur={handleBlur}
+            onKeyUp={handleKeyUp}
+            onOptionSubmit={addAspectRatio}
+        />
+      </label>
 
       <Group>
         {
