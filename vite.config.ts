@@ -5,7 +5,4 @@ import preact from '@preact/preset-vite'
 export default defineConfig(({ command }) => ({
   plugins: [preact()],
   base: command === 'build' ? '/blackbars/' : '/', // GitHub adds URL prefix
-  build: {
-    outDir: 'docs', // GitHub Pages root
-  },
 }))
