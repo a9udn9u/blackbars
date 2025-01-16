@@ -78,6 +78,8 @@ export const DEVICES: [string, Display][] = [
   ["ANBERNIC RG351V", {size: 3.5, ar: {x: 4, y: 3}}],
   ["ANBERNIC RG300X", {size: 3, ar: {x: 4, y: 3}}],
   ["ANBERNIC RG351MP", {size: 3.5, ar: {x: 4, y: 3}}],
+  ["ROG Ally", {size: 7, ar: {x: 16, y: 9}}],
+  ["ROG Ally X", {size: 7, ar: {x: 16, y: 9}}],
   ["AYN Odin Lite", {size: 5.98, ar: {x: 16, y: 9}}],
   ["AYN Odin Pro", {size: 5.98, ar: {x: 16, y: 9}}],
   ["AYN Odin 2", {size: 6, ar: {x: 16, y: 9}}],

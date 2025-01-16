@@ -127,10 +127,9 @@ const renderDisplaySection = (
       <Title order={4}>
         <Code fz='h4' bg='none'>{Utils.getDisplayLabel(display)}</Code>
       </Title>
-      <div className="stacked-grid" style={{
+      <div className="stacked-grid content-wrapper" style={{
         width: `${displayDim.width * zoomFactor}in`,
         height: `${displayDim.height * zoomFactor}in`,
-        outline: 'solid 1px',
       }}>
         {
           arDims

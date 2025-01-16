@@ -2,6 +2,11 @@
   display: grid;
   place-items: center;
 
+  &.content-wrapper {
+    outline: solid 1px;
+    background-color: black;
+  }
+
   &.end {
     place-items: end;
   }
